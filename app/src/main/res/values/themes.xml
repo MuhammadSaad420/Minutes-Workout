@@ -13,4 +13,8 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="toolbarTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorControlNormal">@color/color_toolbar_control</item>
+    </style>
 </resources>

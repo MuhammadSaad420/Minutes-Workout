@@ -44,6 +44,7 @@ class ExerciseActivity : AppCompatActivity() {
     }
 
     private fun startRestTimer() {
+        binding?.tvUpcomingExercise?.text = exerciseList!![currentExercisePosition +1].getName()
         restTimer = object: CountDownTimer(10000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 restProgress++;
@@ -63,6 +64,8 @@ class ExerciseActivity : AppCompatActivity() {
         currentExercisePosition++
         binding?.restLayout?.visibility = View.INVISIBLE;
         binding?.tvReady?.visibility = View.INVISIBLE;
+        binding?.tvUpcomingLabel?.visibility = View.INVISIBLE;
+        binding?.tvUpcomingExercise?.visibility = View.INVISIBLE;
         binding?.exerciseLayout?.visibility = View.VISIBLE;
         binding?.tvExerciseName?.visibility = View.VISIBLE;
         binding?.ivExercise?.visibility = View.VISIBLE
@@ -84,6 +87,8 @@ class ExerciseActivity : AppCompatActivity() {
                     binding?.exerciseLayout?.visibility = View.INVISIBLE;
                     binding?.tvExerciseName?.visibility = View.INVISIBLE;
                     binding?.ivExercise?.visibility = View.INVISIBLE
+                    binding?.tvUpcomingLabel?.visibility = View.INVISIBLE;
+                    binding?.tvUpcomingExercise?.visibility = View.INVISIBLE;
                     restProgress = 0
                     startRestTimer()
                 } else {

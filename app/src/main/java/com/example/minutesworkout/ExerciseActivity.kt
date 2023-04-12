@@ -1,6 +1,5 @@
 package com.example.minutesworkout
 
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -53,7 +52,7 @@ class ExerciseActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-
+                exerciseProgress = 0;
                 startExerciseTimer()
             }
 
@@ -62,9 +61,15 @@ class ExerciseActivity : AppCompatActivity() {
 
     private fun startExerciseTimer() {
         currentExercisePosition++
-        binding?.restLayout?.visibility = View.GONE;
-        binding?.tvReady?.text = "Exercise Name"
+        binding?.restLayout?.visibility = View.INVISIBLE;
+        binding?.tvReady?.visibility = View.INVISIBLE;
         binding?.exerciseLayout?.visibility = View.VISIBLE;
+        binding?.tvExerciseName?.visibility = View.VISIBLE;
+        binding?.ivExercise?.visibility = View.VISIBLE
+        var currentExercise = exerciseList!![currentExercisePosition];
+        binding?.ivExercise?.setImageResource(currentExercise.getImage())
+        binding?.tvExerciseName?.text = currentExercise.getName();
+
         exerciseTimer = object: CountDownTimer(30000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 exerciseProgress++;
@@ -73,7 +78,17 @@ class ExerciseActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                Toast.makeText(this@ExerciseActivity,"One exercise is complete", Toast.LENGTH_SHORT).show()
+                if(currentExercisePosition <= exerciseList!!.size) {
+                    binding?.restLayout?.visibility = View.VISIBLE;
+                    binding?.tvReady?.visibility = View.VISIBLE;
+                    binding?.exerciseLayout?.visibility = View.INVISIBLE;
+                    binding?.tvExerciseName?.visibility = View.INVISIBLE;
+                    binding?.ivExercise?.visibility = View.INVISIBLE
+                    restProgress = 0
+                    startRestTimer()
+                } else {
+
+                }
             }
 
         }.start()

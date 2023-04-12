@@ -10,6 +10,8 @@ import com.example.minutesworkout.databinding.ActivityExerciseBinding
 
 class ExerciseActivity : AppCompatActivity() {
     var binding: ActivityExerciseBinding? = null;
+    var exerciseList: ArrayList<ExerciseModel>? = null;
+    var currentExercisePosition: Int = -1;
     var restTimer: CountDownTimer? = null;
     var restProgress: Int = 0;
     var exerciseTimer: CountDownTimer? = null;
@@ -26,6 +28,7 @@ class ExerciseActivity : AppCompatActivity() {
         binding?.toolbar?.setNavigationOnClickListener {
             onBackPressed()
         }
+        exerciseList = Constants.Companion.defaultExerciseList();
         setUpTimer();
     }
 
@@ -50,6 +53,7 @@ class ExerciseActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
+
                 startExerciseTimer()
             }
 
@@ -57,6 +61,7 @@ class ExerciseActivity : AppCompatActivity() {
     }
 
     private fun startExerciseTimer() {
+        currentExercisePosition++
         binding?.restLayout?.visibility = View.GONE;
         binding?.tvReady?.text = "Exercise Name"
         binding?.exerciseLayout?.visibility = View.VISIBLE;

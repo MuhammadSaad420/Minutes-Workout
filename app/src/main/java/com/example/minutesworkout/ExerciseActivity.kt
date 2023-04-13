@@ -3,11 +3,14 @@ package com.example.minutesworkout
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.speech.tts.TextToSpeech
 import android.view.View
 import android.widget.Toast
 import com.example.minutesworkout.databinding.ActivityExerciseBinding
+import java.util.*
+import kotlin.collections.ArrayList
 
-class ExerciseActivity : AppCompatActivity() {
+class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     var binding: ActivityExerciseBinding? = null;
     var exerciseList: ArrayList<ExerciseModel>? = null;
     var currentExercisePosition: Int = -1;
@@ -15,6 +18,7 @@ class ExerciseActivity : AppCompatActivity() {
     var restProgress: Int = 0;
     var exerciseTimer: CountDownTimer? = null;
     var exerciseProgress: Int = 0;
+    var tts: TextToSpeech? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityExerciseBinding.inflate(layoutInflater)
@@ -27,6 +31,7 @@ class ExerciseActivity : AppCompatActivity() {
         binding?.toolbar?.setNavigationOnClickListener {
             onBackPressed()
         }
+        tts = TextToSpeech(this, this);
         exerciseList = Constants.Companion.defaultExerciseList();
         setUpTimer();
     }
@@ -72,6 +77,7 @@ class ExerciseActivity : AppCompatActivity() {
         var currentExercise = exerciseList!![currentExercisePosition];
         binding?.ivExercise?.setImageResource(currentExercise.getImage())
         binding?.tvExerciseName?.text = currentExercise.getName();
+        speakOut(currentExercise.getName())
 
         exerciseTimer = object: CountDownTimer(30000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -87,8 +93,8 @@ class ExerciseActivity : AppCompatActivity() {
                     binding?.exerciseLayout?.visibility = View.INVISIBLE;
                     binding?.tvExerciseName?.visibility = View.INVISIBLE;
                     binding?.ivExercise?.visibility = View.INVISIBLE
-                    binding?.tvUpcomingLabel?.visibility = View.INVISIBLE;
-                    binding?.tvUpcomingExercise?.visibility = View.INVISIBLE;
+                    binding?.tvUpcomingLabel?.visibility = View.VISIBLE;
+                    binding?.tvUpcomingExercise?.visibility = View.VISIBLE;
                     restProgress = 0
                     startRestTimer()
                 } else {
@@ -99,6 +105,9 @@ class ExerciseActivity : AppCompatActivity() {
         }.start()
     }
 
+    private fun speakOut(name: String) {
+        tts?.speak(name, TextToSpeech.QUEUE_FLUSH,null,"")
+    }
 
 
     override fun onDestroy() {
@@ -112,6 +121,12 @@ class ExerciseActivity : AppCompatActivity() {
             exerciseTimer = null;
             exerciseProgress = 0
         }
+        tts?.stop()
+    }
 
+    override fun onInit(status: Int) {
+        if(status == TextToSpeech.SUCCESS) {
+            tts?.language = Locale.US
+        }
     }
 }

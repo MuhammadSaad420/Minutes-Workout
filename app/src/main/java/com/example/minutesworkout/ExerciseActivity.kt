@@ -6,7 +6,11 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.minutesworkout.databinding.ActivityExerciseBinding
 import java.util.*
 import kotlin.collections.ArrayList
@@ -21,6 +25,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     var exerciseProgress: Int = 0;
     var tts: TextToSpeech? = null
     var player: MediaPlayer? = null
+    var recyclerAdapter : ExerciseStatusAdapter? = null;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityExerciseBinding.inflate(layoutInflater)
@@ -35,7 +40,15 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
         tts = TextToSpeech(this, this);
         exerciseList = Constants.Companion.defaultExerciseList();
+        setUpRecyclerView()
         setUpTimer();
+    }
+
+    private fun setUpRecyclerView() {
+        val layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL,false);
+        binding?.rvExerciseStatus?.layoutManager = layoutManager;
+        recyclerAdapter = ExerciseStatusAdapter(exerciseList!!);
+        binding?.rvExerciseStatus?.adapter = recyclerAdapter;
     }
 
     private fun setUpTimer() {
@@ -66,6 +79,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
 
             override fun onFinish() {
+                exerciseList!![currentExercisePosition + 1].setIsSelected(true);
+                recyclerAdapter?.notifyDataSetChanged();
                 exerciseProgress = 0;
                 startExerciseTimer()
             }
@@ -104,6 +119,9 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     binding?.tvUpcomingLabel?.visibility = View.VISIBLE;
                     binding?.tvUpcomingExercise?.visibility = View.VISIBLE;
                     restProgress = 0
+                    exerciseList!![currentExercisePosition].setIsCompleted(true);
+                    exerciseList!![currentExercisePosition].setIsSelected(false);
+                    recyclerAdapter?.notifyDataSetChanged();
                     startRestTimer()
                 } else {
 

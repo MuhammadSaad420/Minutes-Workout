@@ -1,5 +1,6 @@
 package com.example.minutesworkout
 
+import android.content.Intent
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,6 +18,8 @@ import kotlin.collections.ArrayList
 
 class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     var binding: ActivityExerciseBinding? = null;
+    var restTime: Long = 1;
+    var exerciseTime: Long = 2;
     var exerciseList: ArrayList<ExerciseModel>? = null;
     var currentExercisePosition: Int = -1;
     var restTimer: CountDownTimer? = null;
@@ -71,7 +74,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             print(e.stackTrace)
         }
         binding?.tvUpcomingExercise?.text = exerciseList!![currentExercisePosition +1].getName()
-        restTimer = object: CountDownTimer(10000, 1000) {
+        restTimer = object: CountDownTimer( restTime * 1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 restProgress++;
                 binding?.progressBar?.progress = 10 - restProgress
@@ -102,7 +105,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         binding?.tvExerciseName?.text = currentExercise.getName();
         speakOut(currentExercise.getName())
 
-        exerciseTimer = object: CountDownTimer(30000, 1000) {
+        exerciseTimer = object: CountDownTimer(exerciseTime * 1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 exerciseProgress++;
                 binding?.exerciseProgressBar?.progress = 30 - exerciseProgress
@@ -110,7 +113,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
 
             override fun onFinish() {
-                if(currentExercisePosition <= exerciseList!!.size) {
+                if(currentExercisePosition + 1 < exerciseList!!.size) {
                     binding?.restLayout?.visibility = View.VISIBLE;
                     binding?.tvReady?.visibility = View.VISIBLE;
                     binding?.exerciseLayout?.visibility = View.INVISIBLE;
@@ -124,7 +127,9 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     recyclerAdapter?.notifyDataSetChanged();
                     startRestTimer()
                 } else {
-
+                    val intent = Intent(this@ExerciseActivity, FinishActivity::class.java)
+                    startActivity(intent);
+                    finish()
                 }
             }
 

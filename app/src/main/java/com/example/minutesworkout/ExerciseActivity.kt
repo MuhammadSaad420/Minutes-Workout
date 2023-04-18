@@ -1,5 +1,6 @@
 package com.example.minutesworkout
 
+import android.app.Dialog
 import android.content.Intent
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.minutesworkout.databinding.ActivityExerciseBinding
+import com.example.minutesworkout.databinding.CustomDialogBackBinding
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -39,12 +41,26 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         binding?.toolbar?.setNavigationOnClickListener {
-            onBackPressed()
+            showCustomDialog()
         }
         tts = TextToSpeech(this, this);
         exerciseList = Constants.Companion.defaultExerciseList();
         setUpRecyclerView()
         setUpTimer();
+    }
+
+    private fun showCustomDialog() {
+        var custom = Dialog(this);
+        var binding: CustomDialogBackBinding = CustomDialogBackBinding.inflate(layoutInflater);
+        custom.setContentView(binding.root);
+        binding.btnYes.setOnClickListener {
+            this@ExerciseActivity.finish()
+            custom.dismiss()
+        }
+        binding.btnNo.setOnClickListener {
+            custom.dismiss()
+        }
+        custom.show();
     }
 
     private fun setUpRecyclerView() {

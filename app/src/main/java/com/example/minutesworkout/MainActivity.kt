@@ -18,6 +18,10 @@ class MainActivity : AppCompatActivity() {
             var intent = Intent(this, BMIacitvity::class.java)
             startActivity(intent)
         }
+        binding?.flHistory?.setOnClickListener {
+            var intent = Intent(this, HistoryActivity::class.java)
+            startActivity(intent)
+        }
 
         binding?.frameLayout?.setOnClickListener {
             val intent = Intent(this, ExerciseActivity::class.java)

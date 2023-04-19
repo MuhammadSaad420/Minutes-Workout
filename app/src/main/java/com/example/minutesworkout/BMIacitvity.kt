@@ -151,14 +151,6 @@ class BMIacitvity : AppCompatActivity() {
 
         binding?.llAnswer?.visibility = View.INVISIBLE
     }
-
-    private fun validateFields(): Boolean {
-        var isValid = true
-        if(binding?.etHeight?.text.toString().isEmpty() || binding?.etWeight?.text.toString().isEmpty()) {
-            isValid = false
-        }
-        return isValid;
-    }
     private fun displayBMIResult(bmi: Float) {
 
         val bmiLabel: String

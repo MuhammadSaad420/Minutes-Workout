@@ -9,7 +9,14 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 class BMIacitvity : AppCompatActivity() {
+
+    companion object {
+        private const val METRIC_UNITS_VIEW = "METRIC_UNIT_VIEW" // Metric Unit View
+        private const val US_UNITS_VIEW = "US_UNIT_VIEW" // US Unit View
+    }
     var binding:ActivityBmiacitvityBinding? = null
+    private var currentVisibleView: String =
+        METRIC_UNITS_VIEW
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBmiacitvityBinding.inflate(layoutInflater);
@@ -23,6 +30,7 @@ class BMIacitvity : AppCompatActivity() {
         binding?.toolbar?.setNavigationOnClickListener {
             onBackPressed()
         }
+        makeVisibleMetricUnitsView()
         binding?.btnCalculate?.setOnClickListener {
             if(validateFields()) {
                 val heightValue: Float = binding?.etHeight?.text.toString().toFloat() / 100
@@ -38,7 +46,51 @@ class BMIacitvity : AppCompatActivity() {
             }
         }
 
+        binding?.rgUnits?.setOnCheckedChangeListener { _, checkedId ->
+            when(checkedId) {
+                R.id.rbMetricUnits -> {
+                    makeVisibleMetricUnitsView();
+                }
+                R.id.rbUsUnits -> {
+                    makeVisibleUsUnitsView()
+                }
+            }
+        }
+
     }
+
+    private fun makeVisibleMetricUnitsView() {
+        currentVisibleView = METRIC_UNITS_VIEW // Current View is updated here.
+        binding?.tlWeight?.visibility = View.VISIBLE // METRIC  Height UNITS VIEW is Visible
+        binding?.tlHeight?.visibility = View.VISIBLE // METRIC  Weight UNITS VIEW is Visible
+        binding?.tilUsMetricUnitWeight?.visibility = View.GONE // make weight view Gone.
+        binding?.tilMetricUsUnitHeightFeet?.visibility = View.GONE // make height feet view Gone.
+        binding?.tilMetricUsUnitHeightInch?.visibility = View.GONE // make height inch view Gone.
+
+        binding?.etWeight?.text!!.clear() // height value is cleared if it is added.
+        binding?.etHeight?.text!!.clear() // weight value is cleared if it is added.
+
+        binding?.llAnswer?.visibility = View.INVISIBLE
+    }
+    // END
+
+    // TODO(Step 4 : Making a function to make the US UNITS view visible.)
+    // START
+    private fun makeVisibleUsUnitsView() {
+        currentVisibleView = US_UNITS_VIEW // Current View is updated here.
+        binding?.tlHeight?.visibility = View.INVISIBLE // METRIC  Height UNITS VIEW is InVisible
+        binding?.tlWeight?.visibility = View.INVISIBLE // METRIC  Weight UNITS VIEW is InVisible
+        binding?.tilUsMetricUnitWeight?.visibility = View.VISIBLE // make weight view visible.
+        binding?.tilMetricUsUnitHeightFeet?.visibility = View.VISIBLE // make height feet view visible.
+        binding?.tilMetricUsUnitHeightInch?.visibility = View.VISIBLE // make height inch view visible.
+
+        binding?.etUsMetricUnitWeight?.text!!.clear() // weight value is cleared.
+        binding?.etUsMetricUnitHeightFeet?.text!!.clear() // height feet value is cleared.
+        binding?.etUsMetricUnitHeightInch?.text!!.clear() // height inch is cleared.
+
+        binding?.llAnswer?.visibility = View.INVISIBLE
+    }
+
     private fun validateFields(): Boolean {
         var isValid = true
         if(binding?.etHeight?.text.toString().isEmpty() || binding?.etWeight?.text.toString().isEmpty()) {

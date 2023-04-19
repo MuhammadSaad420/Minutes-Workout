@@ -12,4 +12,96 @@
         android:minHeight="?android:attr/actionBarSize"
         android:layout_height="wrap_content"/>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_below="@id/toolbar"
+        android:id="@+id/tl_weight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/colorAccent"
+        app:hintTextColor="@color/colorAccent"
+        android:layout_margin="15dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        >
+        <EditText
+            android:id="@+id/et_weight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:hint="Weight(kg)"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tl_height"
+        android:layout_below="@+id/tl_weight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/colorAccent"
+        app:hintTextColor="@color/colorAccent"
+        android:layout_margin="15dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        >
+        <EditText
+            android:id="@+id/et_height"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:hint="Height(cm)"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        android:layout_below="@id/tl_height"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="BMI"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:textSize="20sp"
+            />
+        <TextView
+            android:id="@+id/tvBMIValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="25.21"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textSize="20sp"
+            />
+        <TextView
+            android:id="@+id/tvBMIType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Overweight"
+            android:gravity="center"
+            android:textSize="20sp"
+            />
+        <TextView
+            android:id="@+id/tvBMIDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Oops! You really need to take care of yourself!! Workout maybe!"
+            android:gravity="center"
+            android:textSize="20sp"
+            />
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_calculate"
+        android:layout_below="@id/ll_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="calculate"
+        android:textAllCaps="true"
+        android:layout_margin="10dp"
+        />
+
 </RelativeLayout>

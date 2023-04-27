@@ -28,13 +28,23 @@ class FinishActivity : AppCompatActivity() {
             addDateToDatabase(it)
 
         }
-
+        val historyDao = (application as HistoryApp).db?.historyDao();
+        historyDao?.let {
+            getAllHistoryFormDb(it)
+        }
     }
     fun addDateToDatabase(historyDao:HistoryDAO) {
         val calendar = Calendar.getInstance();
         val currentDate = calendar.time.toString();
         lifecycleScope.launch {
             historyDao.insert(HistoryEntity(currentDate))
+        }
+    }
+    fun getAllHistoryFormDb(historyDao: HistoryDAO) {
+        lifecycleScope.launch {
+            historyDao.getAllHistoryData().collect {
+
+            }
         }
     }
 }
